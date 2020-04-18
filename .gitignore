@@ -1,0 +1,6 @@
+/stocksraw/*
+/stocksdata/*
+/__pycache__
+/log
+/chrome/linux/*
+*.log

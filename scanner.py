@@ -1,0 +1,172 @@
+import fetcher
+import datetime
+import time
+import os
+import utils
+import _thread
+import signalfinder
+from log import logger
+import numpy as np
+from datetime import timedelta, timezone
+
+class TradeSignalScanner:
+
+    def __init__(self, progressCallback, tradeSignalCallback, signalFinder, simulation=False):
+        self.queue_data_updated = []
+        self.signal_date_update_finished = False
+        self.tradeSignalCallback = tradeSignalCallback
+        self.progressCallback = progressCallback
+        self.signalFinder = signalFinder
+        self.simulation = simulation
+        self.dataset = dict()
+
+    def tradeSignal(self, final_date):
+        ending = False
+
+        while self.signal_date_update_finished == False or len(self.queue_data_updated) > 0:
+            if len(self.queue_data_updated) == 0:
+                continue
+            ticker = self.queue_data_updated.pop()
+
+            rawdata = dict()
+            if self.simulation:
+                if self.dataset.get(ticker) == None:
+                    rawdata = np.load( "stocksdata/"+ticker+".npy", allow_pickle=True)[0]
+                    self.dataset[ticker] = rawdata
+                else:
+                    rawdata = self.dataset[ticker] 
+                pass
+            else:
+                rawdata = np.load( "stocksdata/"+ticker+".npy", allow_pickle=True)[0]
+
+            datelist = rawdata.get('date')
+            index = 0
+            for i in range(len(datelist)-1, 0, -1):
+                if utils.dateGreaterOrEqual(datelist[i], final_date) and utils.dateGreaterOrEqual(datelist[i-1], final_date) == False:
+                    if datelist[i] == final_date:
+                        index = i
+                        break
+                    else:
+                        days = utils.dayBetweenDate(datelist[i-1], final_date)
+                        if days > 3:
+                            index = 0
+                            break
+                        else:
+                            index = i - 1
+                            break
+
+            if index == 0:
+                # 无效信号
+                continue
+
+            start = max(0, index - 150)
+
+            openprice = rawdata.get('open')[start:index + 1]
+            closeprice = rawdata.get('close')[start:index + 1]
+            high = rawdata.get('high')[start:index + 1]
+            low = rawdata.get('low')[start:index + 1]
+            volume = rawdata.get('volume')[start:index + 1]
+
+            future_data = dict()
+            if index + 1 < len(rawdata.get('open')):
+                future_data['open'] = rawdata.get('open')[index+1:]
+                future_data['close'] = rawdata.get('close')[index+1:]
+                future_data['low'] = rawdata.get('low')[index+1:]
+                future_data['high'] = rawdata.get('high')[index+1:]
+                future_data['volume'] = rawdata.get('volume')[index+1:]
+                future_data['date'] = rawdata.get('date')[index+1:]
+
+            strength, value_dict = self.signalFinder(openprice, closeprice, low, high, volume)
+            if value_dict == None or strength == 0:
+                continue
+
+            value_dict['ticker'] = ticker
+            value_dict['future_data'] = future_data
+
+            self.tradeSignalCallback(ticker, strength, value_dict, False)
+
+        self.tradeSignalCallback("", 0, dict(), True)
+        pass
+
+    def scanAllTradeSignals(self, timestamp):
+
+        f = open('tickerlist.txt',"r")
+        text = f.read()
+        f.close()
+        tickerlist = text.split(",")
+        
+        tz = timezone(timedelta(hours=-4))# UTC-0400 即美国东部时间
+        today = datetime.datetime.fromtimestamp(int(timestamp), tz)
+        final_date = ""
+        if today.weekday() >= 5:
+            # 今天是周六周日，股市不开盘
+            offset = datetime.timedelta(days= today.weekday() - 4)
+            final_date = (today-offset).strftime('%Y-%m-%d') # 数据应该被更新到这一天才是最新数据
+        else:
+            if today.hour > 16:
+                # 今天已经闭盘了 所以今天的数据已经出来的了
+                final_date = today.strftime('%Y-%m-%d')
+            else:
+                # 今天还没闭盘了 最新的数据是昨天的数据
+                offset = datetime.timedelta(days=1)
+                final_date = (today-offset).strftime('%Y-%m-%d')
+
+        try:
+            _thread.start_new_thread( self.tradeSignal, (final_date,) )
+        except:
+            logger.error("scanAllTradeSignals: failed to start thread")
+            return
+
+        metaPath = "stocksdata/meta.npy"
+        meta = dict()
+        if self.simulation:
+            if self.dataset.get("metadata") == None:
+                if os.path.exists(metaPath):
+                    meta = np.load(metaPath, allow_pickle=True)[0]
+                self.dataset["metadata"] = meta
+            else:
+                meta = self.dataset.get("metadata")
+            pass
+        else:
+            if os.path.exists(metaPath):
+                meta = np.load(metaPath, allow_pickle=True)[0]
+            pass
+
+        batch_request = []
+        for index in range(len(tickerlist)):
+            ticker = tickerlist[index]
+
+            if meta.get(ticker) != None:
+                mvalue = meta.get(ticker)
+                latest_date = mvalue.get("latest_date")
+                if utils.dateGreaterOrEqual(latest_date, final_date): 
+                    self.queue_data_updated.append(ticker)
+                    continue
+
+            batch_request.append(ticker)
+            if (len(batch_request) > 3 or index > len(tickerlist) - 3) and self.simulation == False:
+                listTicker, listUpdateDate = fetcher.fetchBatch(batch_request)
+                for i in range(len(listTicker)):
+                    mvalue = dict()
+                    mvalue['latest_date'] = listUpdateDate[i]
+                    meta[listTicker[i]] = mvalue
+                    np.save(metaPath, np.array([meta]))
+
+                    self.progressCallback(listTicker[i], listUpdateDate[i])
+
+                    self.queue_data_updated.append(listTicker[i])
+
+                batch_request = []
+
+        self.signal_date_update_finished = True
+            
+def onProgress(ticker, updateDate):
+    print(ticker, " updated at ", updateDate)
+
+def onTradeSignal(ticker, strength, value_dict, ending):
+    print(ticker, strength, value_dict.get('action'), value_dict.get('entry_price'), value_dict.get('stop_loss'), value_dict.get('take_profit'), value_dict.get('tailing_stop'), ending)
+
+if __name__ == "__main__":
+    scanner = TradeSignalScanner(onProgress, onTradeSignal, signalfinder.movingAverageCrossover)
+    scanner.scanAllTradeSignals(time.time())
+    pass
