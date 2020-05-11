@@ -65,7 +65,6 @@ def fetchBatch(tickerList):
         #指定日期为美国东部时间，即为 UTC标准时间减去4小时 UTC - 0400
         timeArray = datetime.datetime.strptime(latest_date+" UTC-0400", "%Y-%m-%d %Z%z")
         period1 = int(timeArray.timestamp())
-
         period2 = int(time.time())
 
         url = "https://finance.yahoo.com/quote/"+ticker+"/history?interval=1d&filter=history&frequency=1d&period1=" + str(period1) + "&period2=" + str(period2)

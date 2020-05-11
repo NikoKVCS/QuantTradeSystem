@@ -19,6 +19,38 @@ class TradeSignalScanner:
         self.signalFinder = signalFinder
         self.simulation = simulation
         self.dataset = dict()
+        self.metaPath = "stocksdata/meta.npy"
+        self.meta = dict()
+
+        if os.path.exists(self.metaPath):
+            self.meta = np.load(self.metaPath, allow_pickle=True)[0]
+
+        # 更新 meta 文件
+        for filename in os.listdir(r'stocksdata'):
+            if "meta.npy" == filename:
+                continue
+
+            ticker = ""
+            parts = filename.split('.')[:-1]
+            ticker = parts[0]
+            if len(parts) > 1:
+                for i in range(1,len(parts)):
+                    ticker = ticker + "." + parts[i]
+            
+            rawdata = np.load("stocksdata/" + ticker + ".npy", allow_pickle=True)[0]
+            if 'date' not in rawdata.keys() or len(rawdata.get('date')) <= 0:
+                continue
+
+            mvalue = dict()
+            mvalue['latest_date'] = rawdata.get('date')[-1]
+            self.meta[ticker] = mvalue
+
+            if self.simulation:
+                self.dataset[ticker] = rawdata
+        
+        np.save(self.metaPath, np.array([self.meta]))
+            
+            
 
     def tradeSignal(self, final_date):
         ending = False
@@ -48,7 +80,7 @@ class TradeSignalScanner:
                         break
                     else:
                         days = utils.dayBetweenDate(datelist[i-1], final_date)
-                        if days > 3:
+                        if days > 0:
                             index = 0
                             break
                         else:
@@ -67,6 +99,10 @@ class TradeSignalScanner:
             low = rawdata.get('low')[start:index + 1]
             volume = rawdata.get('volume')[start:index + 1]
 
+            strength, value_dict = self.signalFinder(openprice, closeprice, low, high, volume)
+            if value_dict == None or strength == 0:
+                continue
+
             future_data = dict()
             if index + 1 < len(rawdata.get('open')):
                 future_data['open'] = rawdata.get('open')[index+1:]
@@ -76,24 +112,19 @@ class TradeSignalScanner:
                 future_data['volume'] = rawdata.get('volume')[index+1:]
                 future_data['date'] = rawdata.get('date')[index+1:]
 
-            strength, value_dict = self.signalFinder(openprice, closeprice, low, high, volume)
-            if value_dict == None or strength == 0:
-                continue
-
             value_dict['ticker'] = ticker
             value_dict['future_data'] = future_data
+            value_dict['order_created_date'] = datelist[index]
 
             self.tradeSignalCallback(ticker, strength, value_dict, False)
 
         self.tradeSignalCallback("", 0, dict(), True)
         pass
 
-    def scanAllTradeSignals(self, timestamp):
+    def scanAllTradeSignals(self, timestamp, tickerlist = None):
 
-        f = open('tickerlist.txt',"r")
-        text = f.read()
-        f.close()
-        tickerlist = text.split(",")
+        if tickerlist == None:
+            tickerlist = list(self.meta.keys())
         
         tz = timezone(timedelta(hours=-4))# UTC-0400 即美国东部时间
         today = datetime.datetime.fromtimestamp(int(timestamp), tz)
@@ -116,28 +147,13 @@ class TradeSignalScanner:
         except:
             logger.error("scanAllTradeSignals: failed to start thread")
             return
-
-        metaPath = "stocksdata/meta.npy"
-        meta = dict()
-        if self.simulation:
-            if self.dataset.get("metadata") == None:
-                if os.path.exists(metaPath):
-                    meta = np.load(metaPath, allow_pickle=True)[0]
-                self.dataset["metadata"] = meta
-            else:
-                meta = self.dataset.get("metadata")
-            pass
-        else:
-            if os.path.exists(metaPath):
-                meta = np.load(metaPath, allow_pickle=True)[0]
-            pass
-
+        
         batch_request = []
         for index in range(len(tickerlist)):
             ticker = tickerlist[index]
 
-            if meta.get(ticker) != None:
-                mvalue = meta.get(ticker)
+            if self.meta.get(ticker) != None:
+                mvalue = self.meta.get(ticker)
                 latest_date = mvalue.get("latest_date")
                 if utils.dateGreaterOrEqual(latest_date, final_date): 
                     self.queue_data_updated.append(ticker)
@@ -149,8 +165,8 @@ class TradeSignalScanner:
                 for i in range(len(listTicker)):
                     mvalue = dict()
                     mvalue['latest_date'] = listUpdateDate[i]
-                    meta[listTicker[i]] = mvalue
-                    np.save(metaPath, np.array([meta]))
+                    self.meta[listTicker[i]] = mvalue
+                    np.save(self.metaPath, np.array([self.meta]))
 
                     self.progressCallback(listTicker[i], listUpdateDate[i])
 

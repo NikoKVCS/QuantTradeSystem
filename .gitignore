@@ -1,6 +1,11 @@
 /stocksraw/*
 /stocksdata/*
+/stocksexcel/*
 /__pycache__
-/log
+/log/*
 /chrome/linux/*
+/chrome/win/*
 *.log
+/model/*
+*.npy
+

@@ -24,6 +24,7 @@ class Account:
         return len(self.__stocks_on_hold)
 
     def closeoutOutdatedStocks(self, time):
+        message = ""
         for stock in self.__stocks_on_hold:
             if stock.get("closeout_time") == None:
                 continue
@@ -31,6 +32,16 @@ class Account:
             if utils.dateGreaterOrEqual(time, stock.get("closeout_time")):
                 self.__account_cash += stock.get("value")
                 self.__stocks_on_hold.remove(stock)
+
+                if message == "":
+                    message = "## Cash back ## Ticker:%s | %s | CashBack:%.2f | start:%s | profit:%.2f" % (
+                        stock.get("ticker"),stock.get("action"),stock.get("value"),stock.get("start_time"),
+                        stock.get("profit"))
+                else:
+                    message = message + "\n" + "## Cash back ## Ticker:%s | %s | CashBack:%.2f | start:%s | profit:%.2f" % (
+                        stock.get("ticker"),stock.get("action"),stock.get("value"),stock.get("start_time"),
+                        stock.get("profit"))
+        return message
 
     def printInfo(self):
         print("Account Cash : ", self.__account_cash)
