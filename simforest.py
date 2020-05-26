@@ -143,6 +143,11 @@ class Node:
         return (X_left, y_left), (X_right, y_right)
         
     def predict_proba(self, x):
+        #if (self._left != None and self._right != None) and (self._p is None or self._q is None):
+        #    print("fuck")
+        #    self._right = None
+        #    self._left = None
+
         if self._left is None or self._right is None:
             return self.prediction
         elif self._sim(x, self._q) - self._sim(x, self._p) <= self.criterion:
@@ -235,13 +240,13 @@ class SimForest:
             return
 
         objects  = np.load(self._modelpath, allow_pickle=True)
+        forest = []
         for obj in objects:
             tree = Node(self._sim_func, self._rand)
             nodeIdMap = tree.fromObject(obj)
-            self._forest.append(tree)
+            forest.append(tree)
             self._nodeIdMap = nodeIdMap
-
-    
+        self._forest = forest
         if os.path.exists(self._checkpointpath) == False:
             return
         dic = np.load(self._checkpointpath, allow_pickle=True)[0]
@@ -428,6 +433,8 @@ def cos_sim(vector_a, vector_b):
     :param vector_b: 向量 b
     :return: sim
     """
+    if np.size(vector_a) != np.size(vector_b):
+        return 0
     vector_a = np.hstack(vector_a)
     vector_b = np.hstack(vector_b)
     vector_a = np.mat(vector_a)
@@ -445,15 +452,6 @@ simforest_short.load_model()
 
 if __name__ == "__main__":
     
-    dataset = np.load('dataset_v2.npy', allow_pickle=True)[0]
-    testdata = dataset.get('testdata')
-
-    X = testdata.get('data_input')
-    Y = testdata.get('data_output')
-
-    simforest = SimForest('simforest', similarity_func=cos_sim)
-    simforest.test(X,Y)
-
     dataset = np.load('dataset_long.npy', allow_pickle=True)[0]
     traindata = dataset.get('traindata')
     testdata = dataset.get('testdata')
@@ -464,14 +462,14 @@ if __name__ == "__main__":
     X = testdata.get('data_input')
     Y = testdata.get('data_output')
 
-    simforest.test(X,Y)
+    #simforest.test(X,Y)
 
     dataset = np.load('dataset_short.npy', allow_pickle=True)[0]
     traindata = dataset.get('traindata')
     testdata = dataset.get('testdata')
 
     simforest = SimForest('simforest_short', similarity_func=cos_sim)
-    #simforest.train(traindata.get('data_input'), traindata.get('data_output'), 3000, 3000)
+    simforest.train(traindata.get('data_input'), traindata.get('data_output'), 3000, 3000)
     
     X = testdata.get('data_input')
     Y = testdata.get('data_output')

@@ -3,7 +3,25 @@ import json
 import numpy as np
 import time
 import datetime
+import re
 
+aa = dict()
+aa[1] = 2
+if not aa:
+    print("dd")
+
+
+"""
+dataset1 = np.load('dataset_short_mini.npy', allow_pickle=True)[0]
+dataset2 = np.load('dataset_short_test.npy', allow_pickle=True)[0]
+dataset1['testdata'] = dataset2.get('testdata')
+np.save('dataset_short_mini.npy', np.array([dataset1]))
+
+dataset1 = np.load('dataset_long_mini.npy', allow_pickle=True)[0]
+dataset2 = np.load('dataset_long_test.npy', allow_pickle=True)[0]
+dataset1['testdata'] = dataset2.get('testdata')
+np.save('dataset_long_mini.npy', np.array([dataset1]))
+"""
 
 def checkTextValid(text):
     dic = dict()

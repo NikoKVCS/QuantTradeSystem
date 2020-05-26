@@ -6,6 +6,7 @@ import account
 import signalfinder
 import strategy
 import analyzer
+import numpy as np
 
 
 class TradeSimulator:
@@ -60,6 +61,11 @@ class TradeSimulator:
         if self.fixed_invest == False:
             accumulate_investment = self.investment
             self.account.addCash(self.investment)
+
+        rec_asset = []
+        rec_cash = []
+        rec_win = []
+        rec_lose = []
 
         while utils.dateGreaterOrEqual(endtime, today.strftime('%Y-%m-%d')) and self.abort == False:
             today += oneday
@@ -135,6 +141,7 @@ class TradeSimulator:
             if len(orderlist) == 0:
                 continue
             
+            text_table = ""
             for order in orderlist:
                 future_data = order.get('future_data')
                 if future_data == None:
@@ -179,6 +186,26 @@ class TradeSimulator:
                     self.account.addTrade(trade)
 
                     self.messageCallback("Trade", trade)
+
+                    left_asset = self.account.getAsset()
+                    left_cash = self.account.getCash()
+                    rec_asset.append(left_asset)
+                    rec_cash.append(left_cash)
+                    line_text = "%s & %s & %.1f & %.1f & %s & %s & %.1f & %.1f & %.1f & %.1f \\\\" % (
+                        order.get("ticker"),
+                        "多头",
+                        entry_price,
+                        entry_price + profit,
+                        today_str,
+                        closeout_date,
+                        order.get('shares'),
+                        trade["profit"],
+                        left_cash,
+                        left_asset
+                    )
+                    text_table = text_table + "\n" + line_text
+
+
                     pass
 
                 else:
@@ -201,6 +228,26 @@ class TradeSimulator:
                     self.account.addTrade(trade)
 
                     self.messageCallback("Trade", trade)
+
+                    
+                    left_asset = self.account.getAsset()
+                    left_cash = self.account.getCash()
+                    rec_asset.append(left_asset)
+                    rec_cash.append(left_cash)
+                    line_text = "%s & %s & %.1f & %.1f & %s & %s & %.1f & %.1f & %.1f & %.1f \\\\" % (
+                        order.get("ticker"),
+                        "空头",
+                        entry_price,
+                        entry_price - profit,
+                        today_str,
+                        closeout_date,
+                        order.get('shares'),
+                        trade["profit"],
+                        left_cash,
+                        left_asset
+                    )
+                    text_table = text_table + "\n" + line_text
+                    
                     pass
 
 
@@ -210,11 +257,21 @@ class TradeSimulator:
                     win_trade += 1
                     monthly_win_trade += 1
                     monthly_profit += order.get('shares')*profit
+                    rec_win.append(profit/entry_price)
                 else:
                     lose_trade += 1
                     monthly_lose_trade += 1
                     monthly_loss += -order.get('shares')*profit
+                    rec_lose.append(-profit/entry_price)
 
+            
+            f = open('Simulation_table.txt',"a")
+            f.write(text_table)
+            f.close()
+            np.save("Simulation_table_asset.npy", np.array(rec_asset))
+            np.save("Simulation_table_cash.npy", np.array(rec_cash))
+            np.save("Simulation_table_rec_win.npy", np.array(rec_win))
+            np.save("Simulation_table_rec_lose.npy", np.array(rec_lose))
             pass
 
         pass
@@ -250,7 +307,7 @@ def onMessage(event, message):
     global logcontent
     logcontent = logcontent + '\n' + msg_text
     if len(logcontent) > 500:
-        f = open('Simulation_Simforest.txt',"a")
+        f = open('Simulation_EMA.txt',"a")
         f.write(logcontent)
         f.close()
 
@@ -265,7 +322,7 @@ if __name__ == "__main__":
     tickerlist = text.split(",")
     tickerlist = tickerlist[:100]
 
-    simulator = TradeSimulator(onMessage, signalfinder.simForestPredict, strategy.orderGenerator, False, 10000, 1)
-    simulator.startSimulation("2019-12-17", "2020-04-01", tickerList=tickerlist)
+    simulator = TradeSimulator(onMessage, signalfinder.proximityForestPredict, strategy.orderGenerator, False, 10000, 1)
+    simulator.startSimulation("2017-01-01", "2019-12-31", tickerList=tickerlist)
 
     pass

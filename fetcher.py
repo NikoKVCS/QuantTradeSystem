@@ -1,6 +1,7 @@
 import platform
 import time
 import datetime
+from datetime import timedelta, timezone
 import os
 import re
 import utils
@@ -15,7 +16,7 @@ def fetchBatch(tickerList):
     if OS == "Linux":
         chromeDriverPath = "chrome/linux/chromedriver"
     else:
-        chromeDriverPath = ""
+        chromeDriverPath = "chrome/win/chromedriver.exe"
 
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument('--headless')
@@ -59,6 +60,8 @@ def fetchBatch(tickerList):
             closelist = svalue.get('close')
             volumelist = svalue.get('volume')
             datelist = svalue.get('date')
+            if len(datelist) <= 0:
+                continue
 
             latest_date = datelist[-1]
         
@@ -123,13 +126,11 @@ def fetchBatch(tickerList):
         svalue['date'] = datelist
         np.save(ticker_data_path, np.array([svalue]))
 
+        if len(datelist) <= 0:
+            continue
+
         queue_finish.append(ticker)
         queue_finish_date.append(datelist[-1])
-
-        #print(browser.page_source)
-        f = open("stocksraw/"+ticker+'.html',"w")
-        f.write(browser.page_source)
-        f.close()
 
     browser.quit()
     return queue_finish, queue_finish_date

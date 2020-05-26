@@ -1,0 +1,472 @@
+
+
+Date:2018-01-02
+cash:10000
+assets:10000
+
+
+Date:2018-01-03
+cash:10000
+assets:10000
+
+Ticker:GOOGL | BUY | CashBack:1573.01 | start:2018-01-03 | closeout:2018-01-04 | entry_price:1075.98 | shares:1.42 | profit:40.00
+Ticker:BKNG | BUY | CashBack:1454.94 | start:2018-01-03 | closeout:2018-01-04 | entry_price:1790.66 | shares:0.79 | profit:40.00
+Ticker:EA | BUY | CashBack:864.82 | start:2018-01-03 | closeout:2018-01-04 | entry_price:110.00 | shares:8.04 | profit:-20.00
+Ticker:DIS | BUY | CashBack:1149.33 | start:2018-01-03 | closeout:2018-01-08 | entry_price:111.81 | shares:10.46 | profit:-20.00
+Ticker:PFE | BUY | CashBack:1844.58 | start:2018-01-03 | closeout:2018-01-17 | entry_price:36.52 | shares:49.41 | profit:40.00
+Ticker:TMO | BUY | CashBack:297.61 | start:2018-01-03 | closeout:2018-01-04 | entry_price:193.49 | shares:1.50 | profit:8.28
+
+Date:2018-01-04
+cash:2903.9937117994195
+assets:10088.284555607843
+## Cash back ## Ticker:GOOGL | BUY | CashBack:1573.01 | start:2018-01-03 | profit:40.00
+## Cash back ## Ticker:EA | BUY | CashBack:864.82 | start:2018-01-03 | profit:-20.00
+## Cash back ## Ticker:TMO | BUY | CashBack:297.61 | start:2018-01-03 | profit:8.28
+Ticker:PHM | BUY | CashBack:1115.04 | start:2018-01-04 | closeout:2018-01-10 | entry_price:34.31 | shares:33.09 | profit:-20.18
+Ticker:CTAS | BUY | CashBack:1378.56 | start:2018-01-04 | closeout:2018-01-19 | entry_price:158.67 | shares:8.43 | profit:40.35
+Ticker:QCOM | BUY | CashBack:567.17 | start:2018-01-04 | closeout:2018-01-09 | entry_price:66.06 | shares:8.72 | profit:-9.01
+
+Date:2018-01-05
+cash:2589.8374362477734
+assets:10099.454858219324
+## Cash back ## Ticker:BKNG | BUY | CashBack:1454.94 | start:2018-01-03 | profit:40.00
+Ticker:PRU | BUY | CashBack:1619.60 | start:2018-01-05 | closeout:2018-01-10 | entry_price:117.51 | shares:13.44 | profit:40.40
+Ticker:JKHY | BUY | CashBack:857.79 | start:2018-01-05 | closeout:2018-01-10 | entry_price:119.13 | shares:7.03 | profit:19.98
+
+Date:2018-01-06
+cash:1627.7613060309632
+assets:10159.83535861153
+
+
+Date:2018-01-07
+cash:1627.7613060309632
+assets:10159.83535861153
+
+
+Date:2018-01-08
+cash:1627.7613060309632
+assets:10159.83535861153
+## Cash back ## Ticker:DIS | BUY | CashBack:1149.33 | start:2018-01-03 | profit:-20.00
+
+Date:2018-01-09
+cash:2777.0911532218597
+assets:10159.83535861153
+## Cash back ## Ticker:QCOM | BUY | CashBack:567.17 | start:2018-01-04 | profit:-9.01
+Ticker:ORCL | BUY | CashBack:1301.35 | start:2018-01-09 | closeout:2018-01-18 | entry_price:49.07 | shares:25.69 | profit:40.64
+Ticker:HAS | BUY | CashBack:953.70 | start:2018-01-09 | closeout:2018-01-11 | entry_price:93.29 | shares:10.44 | profit:-20.32
+Ticker:IPG | BUY | CashBack:905.57 | start:2018-01-09 | closeout:2018-01-11 | entry_price:20.37 | shares:42.46 | profit:40.64
+Ticker:CME | BUY | CashBack:200.80 | start:2018-01-09 | closeout:2018-02-01 | entry_price:152.71 | shares:1.27 | profit:6.21
+
+Date:2018-01-10
+cash:50.00000000000023
+assets:10227.00760795559
+## Cash back ## Ticker:PHM | BUY | CashBack:1115.04 | start:2018-01-04 | profit:-20.18
+## Cash back ## Ticker:PRU | BUY | CashBack:1619.60 | start:2018-01-05 | profit:40.40
+Ticker:C | BUY | CashBack:1377.90 | start:2018-01-10 | closeout:2018-01-16 | entry_price:75.89 | shares:17.63 | profit:40.26
+
+Date:2018-01-11
+cash:1447.0018336380208
+assets:10267.267415676411
+## Cash back ## Ticker:JKHY | BUY | CashBack:857.79 | start:2018-01-05 | profit:19.98
+## Cash back ## Ticker:HAS | BUY | CashBack:953.70 | start:2018-01-09 | profit:-20.32
+Ticker:RCL | BUY | CashBack:1120.05 | start:2018-01-11 | closeout:2018-01-16 | entry_price:124.38 | shares:8.67 | profit:41.07
+
+Date:2018-01-12
+cash:2179.5137066704087
+assets:10308.336485339116
+## Cash back ## Ticker:IPG | BUY | CashBack:905.57 | start:2018-01-09 | profit:40.64
+Ticker:WLTW | BUY | CashBack:1272.77 | start:2018-01-12 | closeout:2018-01-16 | entry_price:154.91 | shares:8.35 | profit:-20.62
+Ticker:LVS | BUY | CashBack:1324.48 | start:2018-01-12 | closeout:2018-01-16 | entry_price:70.70 | shares:18.15 | profit:41.23
+
+Date:2018-01-13
+cash:508.45214903106944
+assets:10328.953158309792
+
+
+Date:2018-01-14
+cash:508.45214903106944
+assets:10328.953158309792
+
+
+Date:2018-01-15
+cash:508.45214903106944
+assets:10328.953158309792
+
+
+Date:2018-01-16
+cash:508.45214903106944
+assets:10328.953158309792
+## Cash back ## Ticker:C | BUY | CashBack:1377.90 | start:2018-01-10 | profit:40.26
+## Cash back ## Ticker:WLTW | BUY | CashBack:1272.77 | start:2018-01-12 | profit:-20.62
+
+Date:2018-01-17
+cash:3159.1179429141685
+assets:10328.953158309794
+## Cash back ## Ticker:PFE | BUY | CashBack:1844.58 | start:2018-01-03 | profit:40.00
+## Cash back ## Ticker:RCL | BUY | CashBack:1120.05 | start:2018-01-11 | profit:41.07
+Ticker:WYNN | BUY | CashBack:1098.11 | start:2018-01-17 | closeout:2018-01-19 | entry_price:172.63 | shares:6.12 | profit:41.32
+
+Date:2018-01-18
+cash:5066.958438776159
+assets:10370.268970943032
+## Cash back ## Ticker:ORCL | BUY | CashBack:1301.35 | start:2018-01-09 | profit:40.64
+## Cash back ## Ticker:LVS | BUY | CashBack:1324.48 | start:2018-01-12 | profit:41.23
+Ticker:HIG | BUY | CashBack:1506.00 | start:2018-01-18 | closeout:2018-01-19 | entry_price:56.42 | shares:27.06 | profit:-20.74
+Ticker:CINF | BUY | CashBack:1442.54 | start:2018-01-18 | closeout:2018-01-23 | entry_price:75.29 | shares:18.61 | profit:41.48
+Ticker:DHI | BUY | CashBack:1040.27 | start:2018-01-18 | closeout:2018-01-18 | entry_price:52.16 | shares:20.34 | profit:-20.74
+Ticker:PAYX | BUY | CashBack:1377.72 | start:2018-01-18 | closeout:2018-01-19 | entry_price:69.85 | shares:20.02 | profit:-20.74
+Ticker:ALL | BUY | CashBack:363.09 | start:2018-01-18 | closeout:2018-01-23 | entry_price:103.99 | shares:3.54 | profit:-4.74
+
+Date:2018-01-19
+cash:1937.6926193723125
+assets:10344.79151227738
+## Cash back ## Ticker:CTAS | BUY | CashBack:1378.56 | start:2018-01-04 | profit:40.35
+## Cash back ## Ticker:WYNN | BUY | CashBack:1098.11 | start:2018-01-17 | profit:41.32
+## Cash back ## Ticker:DHI | BUY | CashBack:1040.27 | start:2018-01-18 | profit:-20.74
+Ticker:EBAY | BUY | CashBack:1088.14 | start:2018-01-19 | closeout:2018-01-24 | entry_price:38.94 | shares:26.88 | profit:41.38
+
+Date:2018-01-20
+cash:4407.8706833782635
+assets:10386.170678326489
+## Cash back ## Ticker:HIG | BUY | CashBack:1506.00 | start:2018-01-18 | profit:-20.74
+## Cash back ## Ticker:PAYX | BUY | CashBack:1377.72 | start:2018-01-18 | profit:-20.74
+
+Date:2018-01-21
+cash:7291.596351328593
+assets:10386.170678326489
+
+
+Date:2018-01-22
+cash:7291.596351328593
+assets:10386.170678326489
+
+
+Date:2018-01-23
+cash:7291.596351328593
+assets:10386.170678326489
+## Cash back ## Ticker:CINF | BUY | CashBack:1442.54 | start:2018-01-18 | profit:41.48
+Ticker:VZ | BUY | CashBack:1256.35 | start:2018-01-23 | closeout:2018-02-05 | entry_price:53.49 | shares:23.92 | profit:-23.20
+Ticker:DHI | BUY | CashBack:1004.94 | start:2018-01-23 | closeout:2018-01-25 | entry_price:52.41 | shares:19.57 | profit:-20.77
+
+Date:2018-01-24
+cash:6428.874040789974
+assets:10342.194593282169
+## Cash back ## Ticker:ALL | BUY | CashBack:363.09 | start:2018-01-18 | profit:-4.74
+Ticker:CNP | BUY | CashBack:1385.80 | start:2018-01-24 | closeout:2018-01-29 | entry_price:28.17 | shares:49.93 | profit:-20.68
+Ticker:TSN | BUY | CashBack:1363.23 | start:2018-01-24 | closeout:2018-01-24 | entry_price:81.49 | shares:16.98 | profit:-20.68
+Ticker:AMT | BUY | CashBack:1207.58 | start:2018-01-24 | closeout:2018-01-31 | entry_price:141.44 | shares:8.25 | profit:41.37
+Ticker:PLD | BUY | CashBack:805.56 | start:2018-01-24 | closeout:2018-01-25 | entry_price:64.98 | shares:12.61 | profit:-13.60
+
+Date:2018-01-25
+cash:2016.1861963627925
+assets:10328.593463668552
+## Cash back ## Ticker:EBAY | BUY | CashBack:1088.14 | start:2018-01-19 | profit:41.38
+## Cash back ## Ticker:DHI | BUY | CashBack:1004.94 | start:2018-01-23 | profit:-20.77
+## Cash back ## Ticker:TSN | BUY | CashBack:1363.23 | start:2018-01-24 | profit:-20.68
+## Cash back ## Ticker:PLD | BUY | CashBack:805.56 | start:2018-01-24 | profit:-13.60
+Ticker:FAST | BUY | CashBack:895.72 | start:2018-01-25 | closeout:2018-01-30 | entry_price:28.52 | shares:32.13 | profit:-20.66
+Ticker:KMB | BUY | CashBack:1121.41 | start:2018-01-25 | closeout:2018-01-31 | entry_price:120.05 | shares:9.51 | profit:-20.66
+
+Date:2018-01-26
+cash:4219.612512309645
+assets:10287.279089813881
+
+Ticker:MKC | BUY | CashBack:1139.25 | start:2018-01-26 | closeout:2018-02-02 | entry_price:106.19 | shares:10.92 | profit:-20.57
+Ticker:ES | BUY | CashBack:1209.69 | start:2018-01-26 | closeout:2018-01-29 | entry_price:64.88 | shares:19.04 | profit:-25.90
+Ticker:K | BUY | CashBack:1296.49 | start:2018-01-26 | closeout:2018-01-30 | entry_price:68.35 | shares:19.27 | profit:-20.57
+Ticker:DLR | BUY | CashBack:448.22 | start:2018-01-26 | closeout:2018-01-29 | entry_price:111.89 | shares:4.09 | profit:-8.91
+
+Date:2018-01-27
+cash:50.0
+assets:10211.318462890626
+
+
+Date:2018-01-28
+cash:50.0
+assets:10211.318462890626
+
+
+Date:2018-01-29
+cash:50.0
+assets:10211.318462890626
+## Cash back ## Ticker:CNP | BUY | CashBack:1385.80 | start:2018-01-24 | profit:-20.68
+## Cash back ## Ticker:ES | BUY | CashBack:1209.69 | start:2018-01-26 | profit:-25.90
+## Cash back ## Ticker:DLR | BUY | CashBack:448.22 | start:2018-01-26 | profit:-8.91
+
+Date:2018-01-30
+cash:3093.7081150424397
+assets:10211.318462890626
+## Cash back ## Ticker:FAST | BUY | CashBack:895.72 | start:2018-01-25 | profit:-20.66
+## Cash back ## Ticker:K | BUY | CashBack:1296.49 | start:2018-01-26 | profit:-20.57
+Ticker:TWTR | BUY | CashBack:527.03 | start:2018-01-30 | closeout:2018-02-05 | entry_price:25.55 | shares:21.43 | profit:-20.42
+
+Date:2018-01-31
+cash:4738.474864167836
+assets:10190.895825964844
+## Cash back ## Ticker:AMT | BUY | CashBack:1207.58 | start:2018-01-24 | profit:41.37
+Ticker:T | BUY | CashBack:1238.87 | start:2018-01-31 | closeout:2018-02-01 | entry_price:37.80 | shares:31.70 | profit:40.76
+================
+Date:2018-02-01
+AccountCash:4747.95084705086
+AccountAsset:10231.659409268705
+Winrate:0.4523809523809524
+accumulate_investment:10000
+accumulate_profit:231.65940926870036
+accumulate_freecash:0
+monthly_profit:645.3807538517541
+monthly_loss:413.72134458305374
+monthly_freecash:0
+monthly_trades:40
+monthly_winrate:0.4523809523809524
+================
+## Cash back ## Ticker:CME | BUY | CashBack:200.80 | start:2018-01-09 | profit:6.21
+## Cash back ## Ticker:KMB | BUY | CashBack:1121.41 | start:2018-01-25 | profit:-20.66
+## Cash back ## Ticker:T | BUY | CashBack:1238.87 | start:2018-01-31 | profit:40.76
+
+Date:2018-02-02
+cash:7309.033862014641
+assets:10231.659409268705
+## Cash back ## Ticker:MKC | BUY | CashBack:1139.25 | start:2018-01-26 | profit:-20.57
+Ticker:ICE | BUY | CashBack:1455.33 | start:2018-02-02 | closeout:2018-02-05 | entry_price:74.82 | shares:19.79 | profit:-25.53
+Ticker:ETFC | BUY | CashBack:901.31 | start:2018-02-02 | closeout:2018-02-02 | entry_price:54.16 | shares:17.02 | profit:-20.46
+
+Date:2018-02-03
+cash:6045.646263000883
+assets:10185.663923982087
+## Cash back ## Ticker:ETFC | BUY | CashBack:901.31 | start:2018-02-02 | profit:-20.46
+
+Date:2018-02-04
+cash:6946.954470859402
+assets:10185.663923982087
+
+
+Date:2018-02-05
+cash:6946.954470859402
+assets:10185.663923982087
+## Cash back ## Ticker:VZ | BUY | CashBack:1256.35 | start:2018-01-23 | profit:-23.20
+## Cash back ## Ticker:ICE | BUY | CashBack:1455.33 | start:2018-02-02 | profit:-25.53
+
+Date:2018-02-06
+cash:9658.637964651303
+assets:10185.663923982085
+## Cash back ## Ticker:TWTR | BUY | CashBack:527.03 | start:2018-01-30 | profit:-20.42
+
+Date:2018-02-07
+cash:10185.663923982085
+assets:10185.663923982085
+
+Ticker:TPR | BUY | CashBack:811.17 | start:2018-02-07 | closeout:2018-02-09 | entry_price:49.38 | shares:16.84 | profit:-20.37
+Ticker:HAS | BUY | CashBack:764.79 | start:2018-02-07 | closeout:2018-02-08 | entry_price:94.34 | shares:7.67 | profit:40.74
+
+Date:2018-02-08
+cash:8630.070886410069
+assets:10206.035251830048
+## Cash back ## Ticker:HAS | BUY | CashBack:764.79 | start:2018-02-07 | profit:40.74
+
+Date:2018-02-09
+cash:9394.862720913025
+assets:10206.035251830048
+## Cash back ## Ticker:TPR | BUY | CashBack:811.17 | start:2018-02-07 | profit:-20.37
+
+Date:2018-02-10
+cash:10206.035251830048
+assets:10206.035251830048
+
+
+Date:2018-02-11
+cash:10206.035251830048
+assets:10206.035251830048
+
+
+Date:2018-02-12
+cash:10206.035251830048
+assets:10206.035251830048
+
+
+Date:2018-02-13
+cash:10206.035251830048
+assets:10206.035251830048
+
+Ticker:BA | BUY | CashBack:552.58 | start:2018-02-13 | closeout:2018-03-02 | entry_price:347.75 | shares:1.65 | profit:-20.41
+Ticker:LMT | BUY | CashBack:786.57 | start:2018-02-13 | closeout:2018-03-01 | entry_price:348.47 | shares:2.32 | profit:-20.41
+Ticker:BMY | BUY | CashBack:804.12 | start:2018-02-13 | closeout:2018-02-15 | entry_price:63.59 | shares:12.00 | profit:40.82
+
+Date:2018-02-14
+cash:8062.758458025241
+assets:10206.035251830048
+
+Ticker:MSCI | BUY | CashBack:734.05 | start:2018-02-14 | closeout:2018-03-08 | entry_price:141.30 | shares:4.91 | profit:40.82
+Ticker:K | BUY | CashBack:872.04 | start:2018-02-14 | closeout:2018-02-28 | entry_price:67.80 | shares:13.16 | profit:-20.41
+Ticker:SPGI | BUY | CashBack:720.24 | start:2018-02-14 | closeout:2018-02-27 | entry_price:182.42 | shares:3.72 | profit:40.82
+Ticker:UA | BUY | CashBack:427.39 | start:2018-02-14 | closeout:2018-02-22 | entry_price:15.65 | shares:28.61 | profit:-20.41
+
+Date:2018-02-15
+cash:5349.848349853039
+assets:10246.859392837367
+## Cash back ## Ticker:BMY | BUY | CashBack:804.12 | start:2018-02-13 | profit:40.82
+Ticker:NVDA | BUY | CashBack:445.18 | start:2018-02-15 | closeout:2018-03-01 | entry_price:242.59 | shares:1.92 | profit:-20.49
+Ticker:CPB | BUY | CashBack:886.53 | start:2018-02-15 | closeout:2018-02-16 | entry_price:47.52 | shares:19.32 | profit:-31.69
+Ticker:BR | BUY | CashBack:1059.21 | start:2018-02-15 | closeout:2018-02-23 | entry_price:97.43 | shares:10.45 | profit:40.99
+Ticker:MU | BUY | CashBack:488.09 | start:2018-02-15 | closeout:2018-02-26 | entry_price:43.63 | shares:10.25 | profit:40.99
+Ticker:LYV | BUY | CashBack:839.54 | start:2018-02-15 | closeout:2018-02-21 | entry_price:45.39 | shares:17.59 | profit:40.99
+Ticker:RF | BUY | CashBack:690.49 | start:2018-02-15 | closeout:2018-03-02 | entry_price:19.41 | shares:36.63 | profit:-20.49
+Ticker:AKAM | BUY | CashBack:317.77 | start:2018-02-15 | closeout:2018-03-08 | entry_price:67.15 | shares:4.48 | profit:16.95
+
+Date:2018-02-16
+cash:1494.4020788251714
+assets:10314.096779752994
+## Cash back ## Ticker:CPB | BUY | CashBack:886.53 | start:2018-02-15 | profit:-31.69
+Ticker:LDOS | BUY | CashBack:891.01 | start:2018-02-16 | closeout:2018-02-22 | entry_price:66.20 | shares:13.77 | profit:-20.63
+Ticker:BLL | BUY | CashBack:434.51 | start:2018-02-16 | closeout:2018-03-09 | entry_price:39.21 | shares:10.52 | profit:21.87
+
+Date:2018-02-17
+cash:1056.6606715172202
+assets:10315.338546572106
+
+
+Date:2018-02-18
+cash:1056.6606715172202
+assets:10315.338546572106
+
+
+Date:2018-02-19
+cash:1056.6606715172202
+assets:10315.338546572106
+
+
+Date:2018-02-20
+cash:1056.6606715172202
+assets:10315.338546572106
+
+
+Date:2018-02-21
+cash:1056.6606715172202
+assets:10315.338546572106
+## Cash back ## Ticker:LYV | BUY | CashBack:839.54 | start:2018-02-15 | profit:40.99
+Ticker:TFX | BUY | CashBack:756.12 | start:2018-02-21 | closeout:2018-02-22 | entry_price:270.80 | shares:2.90 | profit:-28.09
+Ticker:ALGN | BUY | CashBack:460.72 | start:2018-02-21 | closeout:2018-03-01 | entry_price:259.75 | shares:1.85 | profit:-20.63
+Ticker:SNPS | BUY | CashBack:568.39 | start:2018-02-21 | closeout:2018-02-22 | entry_price:89.99 | shares:6.45 | profit:-12.26
+
+Date:2018-02-22
+cash:50.0
+assets:10254.362324774975
+## Cash back ## Ticker:UA | BUY | CashBack:427.39 | start:2018-02-14 | profit:-20.41
+## Cash back ## Ticker:LDOS | BUY | CashBack:891.01 | start:2018-02-16 | profit:-20.63
+## Cash back ## Ticker:TFX | BUY | CashBack:756.12 | start:2018-02-21 | profit:-28.09
+## Cash back ## Ticker:SNPS | BUY | CashBack:568.39 | start:2018-02-21 | profit:-12.26
+
+Date:2018-02-23
+cash:2692.9097288727476
+assets:10254.362324774975
+## Cash back ## Ticker:BR | BUY | CashBack:1059.21 | start:2018-02-15 | profit:40.99
+Ticker:ADI | BUY | CashBack:818.17 | start:2018-02-23 | closeout:2018-02-28 | entry_price:89.36 | shares:8.70 | profit:41.02
+Ticker:NBL | BUY | CashBack:480.36 | start:2018-02-23 | closeout:2018-03-19 | entry_price:30.23 | shares:16.57 | profit:-20.51
+Ticker:BAX | BUY | CashBack:941.84 | start:2018-02-23 | closeout:2018-03-01 | entry_price:68.30 | shares:14.09 | profit:-20.51
+Ticker:FIS | BUY | CashBack:1079.84 | start:2018-02-23 | closeout:2018-02-28 | entry_price:99.15 | shares:11.10 | profit:-20.51
+Ticker:SJM | BUY | CashBack:380.03 | start:2018-02-23 | closeout:2018-02-27 | entry_price:123.03 | shares:2.94 | profit:18.63
+
+Date:2018-02-24
+cash:50.00000000000023
+assets:10252.48807713418
+
+
+Date:2018-02-25
+cash:50.00000000000023
+assets:10252.48807713418
+
+
+Date:2018-02-26
+cash:50.00000000000023
+assets:10252.48807713418
+## Cash back ## Ticker:MU | BUY | CashBack:488.09 | start:2018-02-15 | profit:40.99
+
+Date:2018-02-27
+cash:538.0893487706596
+assets:10252.48807713418
+## Cash back ## Ticker:SPGI | BUY | CashBack:720.24 | start:2018-02-14 | profit:40.82
+## Cash back ## Ticker:SJM | BUY | CashBack:380.03 | start:2018-02-23 | profit:18.63
+Ticker:HUM | BUY | CashBack:933.37 | start:2018-02-27 | closeout:2018-03-01 | entry_price:275.27 | shares:3.47 | profit:-20.50
+
+Date:2018-02-28
+cash:684.4917893695996
+assets:10231.98310097991
+## Cash back ## Ticker:K | BUY | CashBack:872.04 | start:2018-02-14 | profit:-20.41
+## Cash back ## Ticker:ADI | BUY | CashBack:818.17 | start:2018-02-23 | profit:41.02
+## Cash back ## Ticker:FIS | BUY | CashBack:1079.84 | start:2018-02-23 | profit:-20.51
+Ticker:AES | BUY | CashBack:708.74 | start:2018-02-28 | closeout:2018-02-28 | entry_price:11.25 | shares:64.82 | profit:-20.46
+================
+Date:2018-03-01
+AccountCash:2725.337992855598
+AccountAsset:10211.519134777951
+Winrate:0.4166666666666667
+accumulate_investment:10000
+accumulate_profit:211.51913477794977
+accumulate_freecash:0
+monthly_profit:384.6512913276834
+monthly_loss:404.791565818434
+monthly_freecash:0
+monthly_trades:30
+monthly_winrate:0.375
+================
+## Cash back ## Ticker:LMT | BUY | CashBack:786.57 | start:2018-02-13 | profit:-20.41
+## Cash back ## Ticker:NVDA | BUY | CashBack:445.18 | start:2018-02-15 | profit:-20.49
+## Cash back ## Ticker:ALGN | BUY | CashBack:460.72 | start:2018-02-21 | profit:-20.63
+## Cash back ## Ticker:BAX | BUY | CashBack:941.84 | start:2018-02-23 | profit:-20.51
+## Cash back ## Ticker:AES | BUY | CashBack:708.74 | start:2018-02-28 | profit:-20.46
+
+Date:2018-03-02
+cash:6068.390283861536
+assets:10211.519134777951
+## Cash back ## Ticker:BA | BUY | CashBack:552.58 | start:2018-02-13 | profit:-20.41
+## Cash back ## Ticker:RF | BUY | CashBack:690.49 | start:2018-02-15 | profit:-20.49
+## Cash back ## Ticker:HUM | BUY | CashBack:933.37 | start:2018-02-27 | profit:-20.50
+Ticker:TMUS | BUY | CashBack:834.99 | start:2018-03-02 | closeout:2018-03-09 | entry_price:62.40 | shares:12.73 | profit:40.85
+
+Date:2018-03-03
+cash:7450.6839865898555
+assets:10252.365211317063
+
+
+Date:2018-03-04
+cash:7450.6839865898555
+assets:10252.365211317063
+
+
+Date:2018-03-05
+cash:7450.6839865898555
+assets:10252.365211317063
+
+
+Date:2018-03-06
+cash:7450.6839865898555
+assets:10252.365211317063
+
+Ticker:HBAN | BUY | CashBack:894.76 | start:2018-03-06 | closeout:2018-03-22 | entry_price:16.06 | shares:56.99 | profit:-20.50
+Ticker:BSX | BUY | CashBack:893.31 | start:2018-03-06 | closeout:2018-03-12 | entry_price:27.48 | shares:31.02 | profit:41.01
+Ticker:INCY | BUY | CashBack:529.89 | start:2018-03-06 | closeout:2018-03-16 | entry_price:91.23 | shares:6.03 | profit:-20.50
+Ticker:HES | BUY | CashBack:509.62 | start:2018-03-06 | closeout:2018-03-07 | entry_price:48.72 | shares:10.88 | profit:-20.50
+Ticker:INFO | BUY | CashBack:1037.40 | start:2018-03-06 | closeout:2018-03-07 | entry_price:47.66 | shares:22.20 | profit:-20.50
+Ticker:TFC | BUY | CashBack:868.89 | start:2018-03-06 | closeout:2018-03-22 | entry_price:55.08 | shares:16.15 | profit:-20.50
+Ticker:IBM | BUY | CashBack:755.04 | start:2018-03-06 | closeout:2018-03-22 | entry_price:157.49 | shares:4.90 | profit:-15.97
+
+Date:2018-03-07
+cash:1884.3003128566456
+assets:10174.885304073983
+## Cash back ## Ticker:HES | BUY | CashBack:509.62 | start:2018-03-06 | profit:-20.50
+Ticker:JKHY | BUY | CashBack:1023.94 | start:2018-03-07 | closeout:2018-03-23 | entry_price:121.94 | shares:8.56 | profit:-20.35
+Ticker:WRB | BUY | CashBack:1115.84 | start:2018-03-07 | closeout:2018-04-05 | entry_price:47.15 | shares:22.80 | profit:40.70
+
+Date:2018-03-08
+cash:274.4879024660502
+assets:10195.235074682132
+## Cash back ## Ticker:MSCI | BUY | CashBack:734.05 | start:2018-02-14 | profit:40.82
+## Cash back ## Ticker:INFO | BUY | CashBack:1037.40 | start:2018-03-06 | profit:-20.50
+Ticker:EQR | BUY | CashBack:1024.67 | start:2018-03-08 | closeout:2018-03-16 | entry_price:58.04 | shares:16.95 | profit:40.78
+Ticker:NWSA | BUY | CashBack:911.06 | start:2018-03-08 | closeout:2018-03-23 | entry_price:16.35 | shares:56.97 | profit:-20.39
+Ticker:T | BUY | CashBack:79.04 | start:2018-03-08 | closeout:2018-03-20 | entry_price:37.03 | shares:2.18 | profit:-1.58
+
+Date:2018-03-09
+cash:49.999999999999886
+assets:10214.04941521509
+## Cash back ## Ticker:AKAM | BUY | CashBack:317.77 | start:2018-02-15 | profit:16.95
+## Cash back ## Ticker:TMUS | BUY | CashBack:834.99 | start:2018-03-02 | profit:40.85

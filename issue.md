@@ -35,3 +35,11 @@ B = EMA50 / EMA100
 C = EMA100 / EMA200
 Trend = A*B*C
 
+### Similarity Functions
+Euclidean distance (ED); Dynamic time warping using the full
+window (DTW); Dynamic time warping with a restricted warping window (DTW-R);
+Weighted dynamic time warping (WDTW); Derivative dynamic time warping using
+the full window (DDTW); Derivative dynamic time warping with a restricted warping
+window (DDTW-R); Weighted derivative dynamic time warping (WDDTW); Longest
+common subsequence (LCSS); Edit distance with real penalty (ERP); Time warp edit
+distance (TWE); and, Move-Split-Merge (MSM).

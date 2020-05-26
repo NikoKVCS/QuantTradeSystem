@@ -50,7 +50,35 @@ class TradeSignalScanner:
         
         np.save(self.metaPath, np.array([self.meta]))
             
-            
+    def dataUpdate(self,tickerlist,final_date):
+        
+        batch_request = []
+        for index in range(len(tickerlist)):
+            ticker = tickerlist[index]
+
+            if self.meta.get(ticker) != None:
+                mvalue = self.meta.get(ticker)
+                latest_date = mvalue.get("latest_date")
+                if utils.dateGreaterOrEqual(latest_date, final_date): 
+                    self.queue_data_updated.append(ticker)
+                    continue
+
+            batch_request.append(ticker)
+            if (len(batch_request) > 3 or index > len(tickerlist) - 3) and self.simulation == False:
+                listTicker, listUpdateDate = fetcher.fetchBatch(batch_request)
+                for i in range(len(listTicker)):
+                    mvalue = dict()
+                    mvalue['latest_date'] = listUpdateDate[i]
+                    self.meta[listTicker[i]] = mvalue
+                    np.save(self.metaPath, np.array([self.meta]))
+
+                    self.progressCallback(listTicker[i], listUpdateDate[i])
+
+                    self.queue_data_updated.append(listTicker[i])
+
+                batch_request = []
+
+        self.signal_date_update_finished = True
 
     def tradeSignal(self, final_date):
         ending = False
@@ -139,7 +167,7 @@ class TradeSignalScanner:
                 final_date = today.strftime('%Y-%m-%d')
             else:
                 # 今天还没闭盘了 最新的数据是昨天的数据
-                offset = datetime.timedelta(days=1)
+                offset = datetime.timedelta(days=1) if today.weekday() != 0 else datetime.timedelta(days=3)
                 final_date = (today-offset).strftime('%Y-%m-%d')
 
         try:
@@ -147,34 +175,13 @@ class TradeSignalScanner:
         except:
             logger.error("scanAllTradeSignals: failed to start thread")
             return
+            
+        try:
+            _thread.start_new_thread( self.dataUpdate, (tickerlist,final_date,) )
+        except:
+            logger.error("scanAllTradeSignals: failed to start thread")
+            return
         
-        batch_request = []
-        for index in range(len(tickerlist)):
-            ticker = tickerlist[index]
-
-            if self.meta.get(ticker) != None:
-                mvalue = self.meta.get(ticker)
-                latest_date = mvalue.get("latest_date")
-                if utils.dateGreaterOrEqual(latest_date, final_date): 
-                    self.queue_data_updated.append(ticker)
-                    continue
-
-            batch_request.append(ticker)
-            if (len(batch_request) > 3 or index > len(tickerlist) - 3) and self.simulation == False:
-                listTicker, listUpdateDate = fetcher.fetchBatch(batch_request)
-                for i in range(len(listTicker)):
-                    mvalue = dict()
-                    mvalue['latest_date'] = listUpdateDate[i]
-                    self.meta[listTicker[i]] = mvalue
-                    np.save(self.metaPath, np.array([self.meta]))
-
-                    self.progressCallback(listTicker[i], listUpdateDate[i])
-
-                    self.queue_data_updated.append(listTicker[i])
-
-                batch_request = []
-
-        self.signal_date_update_finished = True
             
 def onProgress(ticker, updateDate):
     print(ticker, " updated at ", updateDate)

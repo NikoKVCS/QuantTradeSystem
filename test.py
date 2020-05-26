@@ -3,8 +3,8 @@ import time
 import numpy as np
 from datetime import datetime, timedelta, timezone
 import os
- 
 
+print(np.shape(None))
 
 def _sample_pair(Y,_rand):
     n_class = np.size(Y,1)

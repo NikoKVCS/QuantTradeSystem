@@ -1,6 +1,7 @@
 import talib as ta
 import numpy as np
 from simforest import simforest_long, simforest_short
+from proximityforest import proxforest_long, proxforest_short
 from talib import MA_Type
 
 def simForestPredict(openprice, closeprice, low, high, volume):
@@ -38,7 +39,6 @@ def simForestPredict(openprice, closeprice, low, high, volume):
     if EMA5[end]>EMA14[end] and EMA5[end-1]<EMA14[end-1]:
         y = simforest_long.predict(x)
         y = np.exp(y)/sum(np.exp(y))
-        print("yooo")
         if np.argmax(y) != 1:
             return 0, None
         
@@ -52,10 +52,9 @@ def simForestPredict(openprice, closeprice, low, high, volume):
         value_dict["tailing_stop"] = False
         return y[1], value_dict
 
-    if EMA5[end]>EMA14[end] and EMA5[end-1]<EMA14[end-1]:
+    if EMA5[end]<EMA14[end] and EMA5[end-1]>EMA14[end-1]:
         y = simforest_short.predict(x)
         y = np.exp(y)/sum(np.exp(y))
-        print("yooo")
         if np.argmax(y) != 1:
             return 0, None
         
@@ -63,11 +62,112 @@ def simForestPredict(openprice, closeprice, low, high, volume):
 
         value_dict = dict()
         value_dict['action'] = 2
-        value_dict["entry_price"] = high[end]
+        value_dict["entry_price"] = low[end]
         value_dict["stop_loss"] = low[end] + ATR[end] * 1
         value_dict["take_profit"] = low[end] - ATR[end] * 2
         value_dict["tailing_stop"] = False
         return y[1], value_dict
+
+    return 0,None
+
+
+def proximityForestPredict(openprice, closeprice, low, high, volume):
+    end = len(closeprice) - 1
+
+    EMA5 = ta.EMA(closeprice, timeperiod=5)
+    EMA14 = ta.EMA(closeprice, timeperiod=14)
+
+    if (EMA5[end] - EMA14[end]) * (EMA5[end-1] - EMA14[end-1]) > 0:
+        return 0,None
+    
+
+    closeprice_processed = np.array(closeprice)
+
+    k, d = ta.STOCHF(high, low, closeprice, fastk_period=5, fastd_period=3, fastd_matype=MA_Type.EMA)
+    rsi = ta.RSI(closeprice, timeperiod=14) # independent
+    sar = ta.SAR(high, low, acceleration=0.02, maximum=0.2)
+
+    for i in range(len(closeprice)-1,0,-1):
+        closeprice_processed[i] = closeprice[i] / closeprice[i-1]
+
+    dataset = np.vstack((
+        closeprice_processed,
+        volume,
+        k,
+        d,
+        rsi,
+        sar/closeprice
+    ))
+    dataset = dataset.T
+    x = dataset[len(dataset)-50:len(dataset)]
+    if np.shape(x) != (50,6):
+        return 0,None
+    
+    if EMA5[end]>EMA14[end] and EMA5[end-1]<EMA14[end-1]:
+        y = proxforest_long.predict(x)
+        y = np.exp(y)/sum(np.exp(y))
+        if np.argmax(y) != 1:
+            return 0, None
+        
+        ATR = ta.ATR(high, low, closeprice, timeperiod=14)
+
+        value_dict = dict()
+        value_dict['action'] = 1
+        value_dict["entry_price"] = high[end]
+        value_dict["stop_loss"] = high[end] - ATR[end] * 1
+        value_dict["take_profit"] = high[end] + ATR[end] * 2
+        value_dict["tailing_stop"] = False
+        return y[1], value_dict
+
+    if EMA5[end]<EMA14[end] and EMA5[end-1]>EMA14[end-1]:
+        y = proxforest_short.predict(x)
+        y = np.exp(y)/sum(np.exp(y))
+        if np.argmax(y) != 1:
+            return 0, None
+        
+        ATR = ta.ATR(high, low, closeprice, timeperiod=14)
+
+        value_dict = dict()
+        value_dict['action'] = 2
+        value_dict["entry_price"] = low[end]
+        value_dict["stop_loss"] = low[end] + ATR[end] * 1
+        value_dict["take_profit"] = low[end] - ATR[end] * 2
+        value_dict["tailing_stop"] = False
+        return y[1], value_dict
+
+    return 0,None
+
+
+def emaPredict(openprice, closeprice, low, high, volume):
+    end = len(closeprice) - 1
+
+    EMA5 = ta.EMA(closeprice, timeperiod=5)
+    EMA14 = ta.EMA(closeprice, timeperiod=14)
+
+    if (EMA5[end] - EMA14[end]) * (EMA5[end-1] - EMA14[end-1]) > 0:
+        return 0,None
+    
+    if EMA5[end]>EMA14[end] and EMA5[end-1]<EMA14[end-1]:
+        ATR = ta.ATR(high, low, closeprice, timeperiod=14)
+
+        value_dict = dict()
+        value_dict['action'] = 1
+        value_dict["entry_price"] = high[end]
+        value_dict["stop_loss"] = high[end] - ATR[end] * 1
+        value_dict["take_profit"] = high[end] + ATR[end] * 2
+        value_dict["tailing_stop"] = False
+        return np.random.rand(1)[0], value_dict
+
+    if EMA5[end]<EMA14[end] and EMA5[end-1]>EMA14[end-1]:
+        ATR = ta.ATR(high, low, closeprice, timeperiod=14)
+
+        value_dict = dict()
+        value_dict['action'] = 2
+        value_dict["entry_price"] = low[end]
+        value_dict["stop_loss"] = low[end] + ATR[end] * 1
+        value_dict["take_profit"] = low[end] - ATR[end] * 2
+        value_dict["tailing_stop"] = False
+        return np.random.rand(1)[0], value_dict
 
     return 0,None
 
