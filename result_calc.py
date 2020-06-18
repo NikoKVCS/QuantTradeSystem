@@ -30,6 +30,7 @@ plt.show()
 """
 
 asset = np.load('Simulation_table_asset.npy', allow_pickle=True)
+print(asset[-1])
 
 fig = plt.figure()
 #plt.title(r'Assets')

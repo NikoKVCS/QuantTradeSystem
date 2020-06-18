@@ -28,10 +28,18 @@ def orderGenerator(stock_candidate, account:account.Account):
         stock_data = stock_candidate.get(strengthlist[i])
         risk_per_share = abs(stock_data.get('entry_price') - stock_data.get('stop_loss'))
         shares = risk_per_trade / risk_per_share
-        cost = shares * stock_data.get('entry_price')
+        if stock_data.get('action') == 1:
+            cost = shares * stock_data.get('entry_price')
+        else:
+            cost = shares * risk_per_share
 
         cost_real = min(cost, cash - cash_used - 50)
-        shares_real = cost_real / stock_data.get('entry_price')
+        
+        if stock_data.get('action') == 1:
+            shares_real = cost_real / stock_data.get('entry_price')
+        else:
+            shares_real = cost_real / risk_per_share
+        
 
         if cost_real < 50:
             continue

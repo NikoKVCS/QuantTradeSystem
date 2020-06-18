@@ -28,17 +28,29 @@ def makeDataset(datasetPath, funcProcessed):
     
     stock_used = dataset.get('stock_used')
 
+    OS = platform.system()
+    chromeDriverPath = ""
+    if OS == "Linux":
+        chromeDriverPath = "chrome/linux/chromedriver"
+    else:
+        chromeDriverPath = "chrome/win/chromedriver.exe"
+
+    chrome_options = webdriver.ChromeOptions()
+    prefs = {'profile.default_content_settings.popups': 0, 'download.default_directory': os.path.join(os.getcwd(), "stocksexcel")}
+    chrome_options.add_experimental_option('prefs', prefs)
+    chrome_options.add_argument('--headless')
+    browser = webdriver.Chrome(chrome_options=chrome_options,executable_path=chromeDriverPath)
+
     for ticker in tickerlist:
         if ticker in stock_used:
             continue
         
-        datelist, openlist, closelist, highlist, lowlist, volumelist = getRawData(ticker)
+        datelist, openlist, closelist, highlist, lowlist, volumelist = getRawData(ticker,browser)
         if len(datelist) == 0:
             continue
 
         data_input, data_output = funcProcessed(datelist, openlist, closelist, highlist, lowlist, volumelist)
         
-
         if np.random.rand(1)[0] < 0.9:
             continue
             
@@ -75,12 +87,12 @@ def makeDataset(datasetPath, funcProcessed):
         stock_used.append(ticker)
         dataset['stock_used'] = stock_used
         np.save(datasetPath, np.array([dataset]))
-
+    browser.quit()
     pass
 
 
 
-def getRawData(ticker):
+def getRawData(ticker, browser):
 
     lowlist = np.zeros((0), dtype=np.float64)
     highlist = np.zeros((0), dtype=np.float64)
@@ -103,23 +115,12 @@ def getRawData(ticker):
     else:
         excel_path = "stocksexcel/%s.csv" % (ticker)
         if os.path.exists(excel_path) == False:
-            OS = platform.system()
-            chromeDriverPath = ""
-            if OS == "Linux":
-                chromeDriverPath = "chrome/linux/chromedriver"
-            else:
-                chromeDriverPath = "chrome/win/chromedriver.exe"
-
-            chrome_options = webdriver.ChromeOptions()
-            chrome_options.add_argument('--headless')
-            browser = webdriver.Chrome(chrome_options=chrome_options,executable_path=chromeDriverPath)
 
             period1 = int(datetime.datetime.strptime("1995-01-01", "%Y-%m-%d").timestamp())
             period2 = int(time.time())
             url = "https://finance.yahoo.com/quote/"+ticker+"/history?interval=1d&filter=history&frequency=1d&period1=" + str(period1) + "&period2=" + str(period2)
             browser.get(url)
             text = browser.page_source
-            browser.quit()
 
             lst = re.findall(r'Fl\(end\) Mt\(3px\) Cur\(p\)([\s\S]*?)download="', text)
             if len(lst) == 0:
@@ -130,9 +131,10 @@ def getRawData(ticker):
                 return datelist, openlist, closelist, highlist, lowlist, volumelist
 
             downloadlink = downloadlink[0].replace("&amp;", "&")
-            r = requests.get(downloadlink)
-            with open(excel_path, "wb") as f:
-                f.write(r.content)
+            browser.get(downloadlink)
+            #r = requests.get(downloadlink)
+            #with open(excel_path, "wb") as f:
+            #    f.write(r.content)
 
         if os.path.exists(excel_path):
             f = open(excel_path,"r")   
@@ -679,9 +681,94 @@ def getProcessedDataV4_Short(datelist, openprice, closeprice, high, low, volume)
     return data_input, data_output
 
 
+def getProcessedData_Gainer(datelist, openprice, closeprice, high, low, volume):
+
+    closeprice_processed = np.array(closeprice)
+
+    for i in range(len(closeprice)-1,0,-1):
+        closeprice_processed[i] = (closeprice[i]-closeprice[i-1]) / closeprice[i-1]
+
+    dataset = closeprice_processed
+
+    SAMPLE_LENGTH = 5
+
+    ATR = ta.ATR(high, low, closeprice, timeperiod=14)
+
+    data_input = np.empty((0,SAMPLE_LENGTH,dataset.shape[1]), np.float32)
+    data_output = np.empty((0,3), np.float32)
+    label = np.empty((0), np.float32)
+
+    i = 100+SAMPLE_LENGTH
+    while i + SAMPLE_LENGTH + 35 < len(closeprice):
+        i += 5
+
+        if utils.dateGreaterThan(datelist[i], '2015-01-01') == False or utils.dateGreaterThan(datelist[i], '2018-01-01'):
+            continue
+
+        # Long position
+        entry_price = high[i]
+        stop_loss = high[i] - ATR[i] * 1
+        take_profit = high[i] + ATR[i] * 2
+        profit_long, closeoutdate_long = analyzer.analyzeTradeResult(datelist[i], 1, entry_price, stop_loss, take_profit, False, datelist[i+1:], openprice[i+1:], closeprice[i+1:], high[i+1:], low[i+1:])
+
+        # Short position
+        entry_price = low[i]
+        stop_loss = low[i] + ATR[i] * 1
+        take_profit = low[i] - ATR[i] * 2
+        profit_short, closeoutdate_short = analyzer.analyzeTradeResult(datelist[i], 2, entry_price, stop_loss, take_profit, False, datelist[i+1:], openprice[i+1:], closeprice[i+1:], high[i+1:], low[i+1:])
+
+        if profit_long > 0 and profit_long > profit_short:
+            y = np.zeros((3), dtype=np.float32)
+            y[1] = 1
+            data_output = np.append(data_output, np.array([y]), axis=0)
+            label = np.append(label, 1)
+        elif profit_short > 0 and profit_short > profit_long:
+            y = np.zeros((3), dtype=np.float32)
+            y[2] = 1
+            data_output = np.append(data_output, np.array([y]), axis=0)
+            label = np.append(label, 2)
+        else:
+            y = np.zeros((3), dtype=np.float32)
+            y[0] = 1
+            data_output = np.append(data_output, np.array([y]), axis=0)
+            label = np.append(label, 0)
+
+        x = dataset[i+1-SAMPLE_LENGTH:i+1]
+        data_input = np.append(data_input, np.array([x.astype(np.float32)]), axis=0)
+
+    if len(data_input) == 0:
+        return data_input, data_output
+
+    """
+    # messed up the data list order
+    index = np.random.permutation(len(data_input))
+    data_input = data_input[index]
+    data_output = data_output[index]
+    label = label[index]
+    
+    # 三种交易信号数量平均化
+    signal_hold = np.where(label==0)[0]
+    signal_buy = np.where(label==1)[0]
+    signal_sell = np.where(label==2)[0]
+
+    length = np.amin([len(signal_hold), len(signal_buy), len(signal_sell)])
+    index = np.append(signal_hold[0:length], signal_buy[0:length])
+    index = np.append(index, signal_sell[0:length])
+    data_input = data_input[index]
+    data_output = data_output[index]
+    """
+
+    # messed up the data list order
+    index = np.random.permutation(len(data_input))
+    data_input = data_input[index]
+    data_output = data_output[index]
+
+    return data_input, data_output
+
 if __name__ == "__main__":
-    #makeDataset('dataset_long_test.npy', getProcessedDataV4_Long)
     makeDataset('dataset_short_test.npy', getProcessedDataV4_Short)
+    #makeDataset('dataset_long_test.npy', getProcessedDataV4_Long)
+    #makeDataset('dataset_short_test.npy', getProcessedDataV4_Short)
     #makeDataset('dataset_long.npy', getProcessedDataV3_Long)
     #makeDataset('dataset_short.npy', getProcessedDataV3_Short)
     pass

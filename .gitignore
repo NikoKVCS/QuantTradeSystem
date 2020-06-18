@@ -8,4 +8,5 @@
 *.log
 /model/*
 *.npy
-
+/dist/*
+/build/*

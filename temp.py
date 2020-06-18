@@ -5,6 +5,38 @@ import time
 import datetime
 import re
 
+a = 2.0253
+sp500 = 1.9903
+print(pow(a, 1/5))
+print(pow(sp500, 1/6))
+
+print(os.getcwd())
+
+
+f = open('s&p500TickerList.txt',"r")
+text = f.read()
+f.close()
+tickerlist = text.split(",")
+tickerlist = tickerlist[:100]
+"""
+for ticker in tickerlist:
+    rawdata = np.load( "stocksdata/"+ticker+".npy", allow_pickle=True)[0]
+    _open = rawdata.get("open")[:-1]
+    _close = rawdata.get("close")[:-1]
+    _low = rawdata.get("low")[:-1]
+    _high = rawdata.get("high")[:-1]
+    _volume = rawdata.get("volume")[:-1]
+    _date = rawdata.get("date")[:-1]
+    rawdata["open"] = _open
+    rawdata["close"] = _close
+    rawdata["low"] = _low
+    rawdata["high"] = _high
+    rawdata["volume"] = _volume
+    rawdata["date"] = _date
+    np.save("stocksdata/"+ticker+".npy", np.array([rawdata]))
+
+    print("a")
+"""
 aa = dict()
 aa[1] = 2
 if not aa:

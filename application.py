@@ -2,7 +2,7 @@ import sys
 from PyQt4 import QtGui, QtCore
 import scanner
 import datetime
-from signalfinder import proximityForestPredict
+import signalfinder 
 import math
 import time
 
@@ -23,7 +23,7 @@ class Application:
         
         self.stock_candidate = dict()
         self.lock = False
-        self.signalScanner = scanner.TradeSignalScanner(self.onProgress, self.onTradeSignal, proximityForestPredict,simulation=False)
+        self.signalScanner = scanner.TradeSignalScanner(self.onProgress, self.onTradeSignal, signalfinder.emaPredict,simulation=False)
         self.text = ""
         self.main()
         pass
@@ -56,25 +56,25 @@ class Application:
         self.lock = True
         self.le.setText(self.text + "\n扫描市场交易信号中...")
         self.signalScanner.scanAllTradeSignals(time.time(),tickerlist=self.tickerlist)
-        #today = datetime.datetime.strptime("2020-05-25"+" UTC-0400", "%Y-%m-%d %Z%z")
+        #today = datetime.datetime.strptime("2020-06-10"+" UTC-0400", "%Y-%m-%d %Z%z")
         #self.signalScanner.scanAllTradeSignals(today.timestamp(),tickerlist=self.tickerlist)
 
     def getStrategy(self):
-        """
+        
         if self.lock:
             return
         if not self.stock_candidate:
             return
-        """
-        text, ok = QtGui.QInputDialog.getText(self.w , '对话框', '请输入现金数目和持有股票的价值，用空格隔开:')
+        
+        text, ok = QtGui.QInputDialog.getText(self.w , '对话框', '请输入流动资产、现金和现持交易数目，用空格隔开:')
 
         if not ok:
             return
 
-        cash, assets = str(text).split(" ")
-        cash = int(cash)
+        assets, cash, current_trades = str(text).split(" ")
         assets = int(assets)
-
+        cash = int(cash)
+        current_trades = int(current_trades)
 
         stock_candidate = self.stock_candidate
 
@@ -84,15 +84,13 @@ class Application:
             self.c.uiSignal.emit(self.text)
             return
             
-        risk_current = assets * 0.02
-        risk_maximum = (cash+assets)*0.1
-        if risk_current >= risk_maximum:
+        if current_trades >= 10:
             self.text += "\n\n当前交易的潜在亏损风险已到达上限，暂时不建议发起新交易"
             self.c.uiSignal.emit(self.text)
             return
 
-        risk_per_trade = (cash+assets) * 0.01
-        trade_num = math.floor((risk_maximum - risk_current) / risk_per_trade)
+        risk_per_trade = assets * 0.01
+        trade_num = 10- current_trades
 
         if trade_num == 0:
             self.text += "\n\n当前交易的潜在亏损风险已到达上限，暂时不建议发起新交易"

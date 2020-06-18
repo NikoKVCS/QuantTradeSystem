@@ -195,41 +195,67 @@ class IBApp(IBWrapper, IBClient):
         else:
             self.makeOrderOperations()
 
-    def bracketOrder(self, parentOrderId:int, action:str, quantity:float, limitPrice:float, takeProfitLimitPrice:float, stopLossPrice:float):
+    def bracketOrder(self, parentOrderId:int, action:str, quantity:float, limitPrice:float, ATR:float):
+        bracketOrder = []
+        if action == "BUY":
 
-        parent = Order()
-        parent.orderId = parentOrderId
-        parent.action = action
-        parent.orderType = "LMT"
-        parent.totalQuantity = quantity
-        parent.lmtPrice = limitPrice
-        #The parent and children orders will need this attribute set to False to prevent accidental executions.
-        #The LAST CHILD will have it set to True, 
-        parent.transmit = False
-        
-        takeProfit = Order()
-        takeProfit.orderId = self.nextOrderId()
-        takeProfit.action = "SELL" if action == "BUY" else "BUY"
-        takeProfit.orderType = "LMT"
-        takeProfit.totalQuantity = quantity
-        takeProfit.lmtPrice = takeProfitLimitPrice
-        takeProfit.parentId = parentOrderId
-        takeProfit.transmit = False
-        
-        # 这里可以改为 trailing stop单
-        stopLoss = Order()
-        stopLoss.orderId = self.nextOrderId()
-        stopLoss.action = "SELL" if action == "BUY" else "BUY"
-        stopLoss.orderType = "STP"
-        #Stop trigger price
-        stopLoss.auxPrice = stopLossPrice
-        stopLoss.totalQuantity = quantity
-        stopLoss.parentId = parentOrderId
-        #In this case, the low side order will be the last child being sent. Therefore, it needs to set this attribute to True 
-        #to activate all its predecessors
-        stopLoss.transmit = True
-        
-        bracketOrder = [parent, takeProfit, stopLoss]
+            parent = Order()
+            parent.orderId = parentOrderId
+            parent.action = "BUY"
+            parent.orderType = "STP LMT"
+            parent.totalQuantity = quantity
+            parent.lmtPrice = limitPrice + 0.1*ATR
+            parent.auxPrice = limitPrice
+            parent.transmit = False
+            
+            takeProfit = Order()
+            takeProfit.orderId = self.nextOrderId()
+            takeProfit.action = "SELL"
+            takeProfit.orderType = "LMT"
+            takeProfit.totalQuantity = quantity
+            takeProfit.lmtPrice = limitPrice + ATR*2
+            takeProfit.parentId = parentOrderId
+            takeProfit.transmit = False
+            
+            stopLoss = Order()
+            stopLoss.orderId = self.nextOrderId()
+            stopLoss.action = "SELL"
+            stopLoss.orderType = "STP"
+            stopLoss.auxPrice = limitPrice - ATR
+            stopLoss.totalQuantity = quantity
+            stopLoss.parentId = parentOrderId
+            stopLoss.transmit = True
+            bracketOrder = [parent, takeProfit, stopLoss]
+        else:
+            
+            parent = Order()
+            parent.orderId = parentOrderId
+            parent.action = "SELL"
+            parent.orderType = "STP LMT"
+            parent.totalQuantity = quantity
+            parent.lmtPrice = limitPrice - 0.1*ATR
+            parent.auxPrice = limitPrice
+            parent.transmit = False
+            
+            takeProfit = Order()
+            takeProfit.orderId = self.nextOrderId()
+            takeProfit.action = "BUY"
+            takeProfit.orderType = "LMT"
+            takeProfit.totalQuantity = quantity
+            takeProfit.lmtPrice = limitPrice - ATR*2
+            takeProfit.parentId = parentOrderId
+            takeProfit.transmit = False
+            
+            stopLoss = Order()
+            stopLoss.orderId = self.nextOrderId()
+            stopLoss.action = "BUY"
+            stopLoss.orderType = "STP"
+            stopLoss.auxPrice = limitPrice + ATR
+            stopLoss.totalQuantity = quantity
+            stopLoss.parentId = parentOrderId
+            stopLoss.transmit = True
+            
+            bracketOrder = [parent, takeProfit, stopLoss]
         return bracketOrder
 
     def makeOrderOperations(self):

@@ -2,6 +2,7 @@ from sklearn.svm import SVC
 from sklearn.ensemble import RandomForestClassifier
 import numpy as np
 from proximityforest import proxforest_short, proxforest_long
+import proximityforest
 
 def compare_short():
 
@@ -9,8 +10,12 @@ def compare_short():
     traindata = dataset.get('traindata')
     testdata = dataset.get('testdata')
 
+    """
+    proxforest = proximityforest.ProximityForest('compare_promixityforest_short', r=2)
+    proxforest.train(traindata.get('data_input'), traindata.get('data_output'), 2000, 1500, n_estimators=1)
+    proxforest.test(testdata.get('data_input'), testdata.get('data_output'))
+    """
     proxforest_short.test(testdata.get('data_input'), testdata.get('data_output'))
-    #proxforest_long.test(testdata.get('data_input'), testdata.get('data_output'))
 
 
     X = traindata.get('data_input')
@@ -161,4 +166,5 @@ def compare_long():
         print(win_trades,trades, win_trades/trades)
 
 if __name__ == "__main__":
-    compare_long()
+    #compare_long()
+    compare_short()

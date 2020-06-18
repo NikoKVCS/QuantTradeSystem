@@ -4,7 +4,30 @@ from simforest import simforest_long, simforest_short
 from proximityforest import proxforest_long, proxforest_short
 from talib import MA_Type
 
-def simForestPredict(openprice, closeprice, low, high, volume):
+
+f = open('s&p500TickerList.txt',"r")
+text = f.read()
+f.close()
+alltickerlist = text.split(",")
+
+def DayGainer(ticker, openprice, closeprice, low, high, volume):
+    end = len(closeprice) - 1
+    gain = (closeprice[end] - closeprice[end-1]) / closeprice[end-1]
+
+    if gain < 0:
+        return 0, None
+    
+    ATR = ta.ATR(high, low, closeprice, timeperiod=14)
+
+    value_dict = dict()
+    value_dict['action'] = 1
+    value_dict["entry_price"] = high[end]
+    value_dict["stop_loss"] = high[end] - ATR[end] * 1
+    value_dict["take_profit"] = high[end] + ATR[end] * 2
+    value_dict["tailing_stop"] = False
+    return gain, value_dict
+
+def simForestPredict(ticker, openprice, closeprice, low, high, volume):
     end = len(closeprice) - 1
 
     EMA5 = ta.EMA(closeprice, timeperiod=5)
@@ -71,7 +94,7 @@ def simForestPredict(openprice, closeprice, low, high, volume):
     return 0,None
 
 
-def proximityForestPredict(openprice, closeprice, low, high, volume):
+def proximityForestPredict(ticker, openprice, closeprice, low, high, volume):
     end = len(closeprice) - 1
 
     EMA5 = ta.EMA(closeprice, timeperiod=5)
@@ -138,7 +161,126 @@ def proximityForestPredict(openprice, closeprice, low, high, volume):
     return 0,None
 
 
-def emaPredict(openprice, closeprice, low, high, volume):
+def emaWeightedBuyPredict(ticker, openprice, closeprice, low, high, volume):
+    end = len(closeprice) - 1
+
+    EMA5 = ta.EMA(closeprice, timeperiod=5)
+    EMA14 = ta.EMA(closeprice, timeperiod=14)
+
+    global alltickerlist
+
+    if (EMA5[end] - EMA14[end]) * (EMA5[end-1] - EMA14[end-1]) > 0:
+        return 0,None
+    
+    if EMA5[end]>EMA14[end] and EMA5[end-1]<EMA14[end-1]:
+        ATR = ta.ATR(high, low, closeprice, timeperiod=14)
+
+        value_dict = dict()
+        value_dict['action'] = 1
+        value_dict["entry_price"] = high[end]
+        value_dict["stop_loss"] = high[end] - ATR[end] * 1
+        value_dict["take_profit"] = high[end] + ATR[end] * 2
+        value_dict["tailing_stop"] = False
+        strength = np.random.rand(1)[0] * 0.0001 + 1-(alltickerlist.index(ticker) + 1)/len(alltickerlist)
+        if strength < 0.8:
+            return 0,None
+        return strength, value_dict
+        
+    return 0,None
+
+
+def emaWeightedSellPredict(ticker, openprice, closeprice, low, high, volume):
+    end = len(closeprice) - 1
+
+    EMA5 = ta.EMA(closeprice, timeperiod=5)
+    EMA14 = ta.EMA(closeprice, timeperiod=14)
+
+    global alltickerlist
+
+    if (EMA5[end] - EMA14[end]) * (EMA5[end-1] - EMA14[end-1]) > 0:
+        return 0,None
+    
+    if EMA5[end]<EMA14[end] and EMA5[end-1]>EMA14[end-1]:
+        ATR = ta.ATR(high, low, closeprice, timeperiod=14)
+
+        value_dict = dict()
+        value_dict['action'] = 2
+        value_dict["entry_price"] = low[end]
+        value_dict["stop_loss"] = low[end] + ATR[end] * 0.2
+        value_dict["take_profit"] = low[end] - ATR[end] * 2
+        value_dict["tailing_stop"] = False
+        strength = np.random.rand(1)[0] * 0.0001 + alltickerlist.index(ticker)/len(alltickerlist)
+        if strength < 0.8:
+            return 0,None
+        return strength, value_dict
+
+    return 0,None
+
+
+def emaWeightedPredict(ticker, openprice, closeprice, low, high, volume):
+    end = len(closeprice) - 1
+
+    EMA5 = ta.EMA(closeprice, timeperiod=5)
+    EMA14 = ta.EMA(closeprice, timeperiod=14)
+
+    global alltickerlist
+
+    if (EMA5[end] - EMA14[end]) * (EMA5[end-1] - EMA14[end-1]) > 0:
+        return 0,None
+    
+    if EMA5[end]>EMA14[end] and EMA5[end-1]<EMA14[end-1]:
+        ATR = ta.ATR(high, low, closeprice, timeperiod=14)
+
+        value_dict = dict()
+        value_dict['action'] = 1
+        value_dict["entry_price"] = high[end]
+        value_dict["stop_loss"] = high[end] - ATR[end] * 1
+        value_dict["take_profit"] = high[end] + ATR[end] * 2
+        value_dict["tailing_stop"] = False
+        strength = np.random.rand(1)[0] * 0.0001 + 1-(alltickerlist.index(ticker) + 1)/len(alltickerlist)
+        if strength < 0.8:
+            return 0,None
+        return strength, value_dict
+
+    if EMA5[end]<EMA14[end] and EMA5[end-1]>EMA14[end-1]:
+        ATR = ta.ATR(high, low, closeprice, timeperiod=14)
+
+        value_dict = dict()
+        value_dict['action'] = 2
+        value_dict["entry_price"] = low[end]
+        value_dict["stop_loss"] = low[end] + ATR[end] * 0.2
+        value_dict["take_profit"] = low[end] - ATR[end] * 2
+        value_dict["tailing_stop"] = False
+        strength = np.random.rand(1)[0] * 0.0001 + alltickerlist.index(ticker)/len(alltickerlist)
+        if strength < 0.8:
+            return 0,None
+        return strength, value_dict
+
+    return 0,None
+
+
+def emaBuyPredict(ticker, openprice, closeprice, low, high, volume):
+    end = len(closeprice) - 1
+
+    EMA5 = ta.EMA(closeprice, timeperiod=5)
+    EMA14 = ta.EMA(closeprice, timeperiod=14)
+
+    if EMA5[end]>EMA14[end] and EMA5[end-1]<EMA14[end-1]:
+        ATR = ta.ATR(high, low, closeprice, timeperiod=14)
+
+        value_dict = dict()
+        value_dict['action'] = 1
+        value_dict["entry_price"] = high[end]
+        value_dict["stop_loss"] = high[end] - ATR[end] * 1
+        value_dict["take_profit"] = high[end] + ATR[end] * 2
+        value_dict["tailing_stop"] = False
+        return np.random.rand(1)[0], value_dict
+
+    return 0,None
+
+
+
+def emaPredict(ticker, openprice, closeprice, low, high, volume):
     end = len(closeprice) - 1
 
     EMA5 = ta.EMA(closeprice, timeperiod=5)
@@ -172,7 +314,7 @@ def emaPredict(openprice, closeprice, low, high, volume):
     return 0,None
 
 
-def MACrossover(openprice, closeprice, low, high, volume):
+def MACrossover(ticker, openprice, closeprice, low, high, volume):
     length = len(openprice)
 
     if length <= 0:
@@ -214,7 +356,7 @@ def MACrossover(openprice, closeprice, low, high, volume):
 
     return strength, value_dict
 
-def movingAverageCrossover(openprice, closeprice, low, high, volume):
+def movingAverageCrossover(ticker, openprice, closeprice, low, high, volume):
     length = len(openprice)
 
     if length <= 0:
@@ -257,11 +399,11 @@ def movingAverageCrossover(openprice, closeprice, low, high, volume):
     return strength, value_dict
     
     
-def bounceSwingSystem(openprice, closeprice, low, high, volume):
+def bounceSwingSystem(ticker, openprice, closeprice, low, high, volume):
     pass
 
 
-def bounce18days(openprice, closeprice, low, high, volume):
+def bounce18days(ticker, openprice, closeprice, low, high, volume):
     EMA18 = ta.EMA(closeprice, timeperiod=18)
     EMA50 = ta.EMA(closeprice, timeperiod=50)
     EMA100 = ta.EMA(closeprice, timeperiod=100)
@@ -361,7 +503,7 @@ def createLine(x1,y1, x2,y2):
     return line
 
     
-def MacdDivergence(openprice, closeprice, low, high, volume):
+def MacdDivergence(ticker, openprice, closeprice, low, high, volume):
     EMA18 = ta.EMA(closeprice, timeperiod=18)
     EMA50 = ta.EMA(closeprice, timeperiod=50)
     EMA100 = ta.EMA(closeprice, timeperiod=100)

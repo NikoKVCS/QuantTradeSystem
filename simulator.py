@@ -41,6 +41,7 @@ class TradeSimulator:
         bt = datetime.datetime.strptime(begintime+" UTC-0400", "%Y-%m-%d %Z%z")
         oneday = datetime.timedelta(days=1)
         today = bt
+        today -= oneday
 
         monthly_profit = 0
         monthly_loss = 0
@@ -51,6 +52,13 @@ class TradeSimulator:
 
         win_trade = 1
         lose_trade = 1
+
+        win_long_trade = 1
+        lose_long_trade = 1
+
+        win_short_trade = 1
+        lose_short_trade = 1
+
 
         reinvest_scale = self.reinvest_scale
 
@@ -92,6 +100,8 @@ class TradeSimulator:
                 message['AccountCash'] = self.account.getCash()
                 message['AccountAsset'] = self.account.getAsset()
                 message['Winrate'] = win_trade / (win_trade+lose_trade)
+                message['Long_Winrate'] = win_long_trade / (win_long_trade+lose_long_trade)
+                message['Short_Winrate'] = win_short_trade / (win_short_trade+lose_short_trade)
                 message['accumulate_investment'] = accumulate_investment
                 message['accumulate_profit'] = accumulate_profit
                 message['accumulate_freecash'] = accumulate_freecash
@@ -258,11 +268,19 @@ class TradeSimulator:
                     monthly_win_trade += 1
                     monthly_profit += order.get('shares')*profit
                     rec_win.append(profit/entry_price)
+                    if action == 1:
+                        win_long_trade += 1
+                    else:
+                        win_short_trade += 1
                 else:
                     lose_trade += 1
                     monthly_lose_trade += 1
                     monthly_loss += -order.get('shares')*profit
                     rec_lose.append(-profit/entry_price)
+                    if action == 1:
+                        lose_long_trade += 1
+                    else:
+                        lose_short_trade += 1
 
             
             f = open('Simulation_table.txt',"a")
@@ -281,6 +299,7 @@ class TradeSimulator:
 
 
 logcontent = ""
+logfile = ""
 
 def onMessage(event, message):
     msg_text = ""
@@ -305,9 +324,10 @@ def onMessage(event, message):
     print(msg_text)
 
     global logcontent
+    global logfile
     logcontent = logcontent + '\n' + msg_text
     if len(logcontent) > 500:
-        f = open('Simulation_EMA.txt',"a")
+        f = open(logfile,"a")
         f.write(logcontent)
         f.close()
 
@@ -322,7 +342,8 @@ if __name__ == "__main__":
     tickerlist = text.split(",")
     tickerlist = tickerlist[:100]
 
-    simulator = TradeSimulator(onMessage, signalfinder.proximityForestPredict, strategy.orderGenerator, False, 10000, 1)
+    logfile = 'Simulation_DayGainer-100stocks.txt'
+    simulator = TradeSimulator(onMessage, signalfinder.DayGainer, strategy.orderGenerator, False, 10000, 1)
     simulator.startSimulation("2017-01-01", "2019-12-31", tickerList=tickerlist)
 
     pass

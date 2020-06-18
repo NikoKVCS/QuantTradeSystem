@@ -127,7 +127,7 @@ class TradeSignalScanner:
             low = rawdata.get('low')[start:index + 1]
             volume = rawdata.get('volume')[start:index + 1]
 
-            strength, value_dict = self.signalFinder(openprice, closeprice, low, high, volume)
+            strength, value_dict = self.signalFinder(ticker, openprice, closeprice, low, high, volume)
             if value_dict == None or strength == 0:
                 continue
 
@@ -153,6 +153,9 @@ class TradeSignalScanner:
 
         if tickerlist == None:
             tickerlist = list(self.meta.keys())
+
+        self.queue_data_updated = []
+        self.signal_date_update_finished = False
         
         tz = timezone(timedelta(hours=-4))# UTC-0400 即美国东部时间
         today = datetime.datetime.fromtimestamp(int(timestamp), tz)
