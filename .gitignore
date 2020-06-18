@@ -10,3 +10,5 @@
 *.npy
 /dist/*
 /build/*
+/dist
+/build
